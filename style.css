@@ -1,0 +1,702 @@
+/* ═══════════════════════════════════════════════════════════
+   GeoMark — style.css
+   Aesthetic: Military cartography meets modern SaaS.
+   Dark slate canvas, amber accent, DM Mono utilitarian type.
+═══════════════════════════════════════════════════════════ */
+
+/* ── Design Tokens ── */
+:root {
+  --bg-deep:      #0d1117;
+  --bg-surface:   #161b22;
+  --bg-raised:    #1f2937;
+  --bg-hover:     #243040;
+
+  --border:       #2d3748;
+  --border-light: #374151;
+
+  --accent:       #f59e0b;       /* amber */
+  --accent-dim:   rgba(245, 158, 11, 0.15);
+  --accent-glow:  rgba(245, 158, 11, 0.35);
+
+  --success:      #10b981;
+  --success-dim:  rgba(16, 185, 129, 0.15);
+  --danger:       #ef4444;
+  --danger-dim:   rgba(239, 68, 68, 0.12);
+
+  --text-primary: #f0f4f8;
+  --text-secondary:#94a3b8;
+  --text-muted:   #4b5563;
+
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  --sidebar-w:    350px;
+  --radius-sm:    6px;
+  --radius-md:    10px;
+  --radius-lg:    16px;
+
+  --transition:   0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ── Layout Shell ── */
+body {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ════════════════════════════════════════════
+   SIDEBAR
+════════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-light) transparent;
+  position: relative;
+  z-index: 10;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+/* ── Brand Header ── */
+.sidebar__header {
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-deep);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.sidebar__brand-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+.sidebar__tagline {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  padding-left: 38px;
+}
+
+/* ── Reminder Form ── */
+.reminder-form {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  animation: slideDown 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reminder-form.is-visible {
+  display: flex;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reminder-form__coords {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius-sm);
+}
+
+.label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.coords-value {
+  font-size: 11.5px;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-unit {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.form-input {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #0d1117;
+  flex: 1;
+}
+
+.btn--primary:hover {
+  background: #fbbf24;
+  box-shadow: 0 4px 16px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.btn--ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.btn--danger:hover {
+  background: var(--danger-dim);
+  border-color: var(--danger);
+}
+
+/* ── Reminders Section ── */
+.reminders-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.reminders-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px 10px;
+  position: sticky;
+  top: 0;
+}
+
+.section-title {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.reminders-count {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  min-width: 24px;
+  text-align: center;
+}
+
+.reminders-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.reminders-list::-webkit-scrollbar { width: 3px; }
+.reminders-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ── Empty State ── */
+.reminders-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Reminder Card ── */
+.reminder-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition);
+  animation: cardIn 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.reminder-card:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-light);
+  transform: translateX(2px);
+}
+
+.reminder-card.is-triggered {
+  border-left-color: var(--success);
+  opacity: 0.7;
+}
+
+.reminder-card.is-triggered::after {
+  content: '✓ TRIGGERED';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.reminder-card__title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding-right: 60px; /* space for triggered badge */
+}
+
+.reminder-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reminder-card__radius,
+.reminder-card__coords {
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reminder-card__coords svg,
+.reminder-card__radius svg {
+  opacity: 0.6;
+}
+
+.reminder-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2px;
+}
+
+/* ── QR Code Section ── */
+.qr-section {
+  padding: 16px 22px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-deep);
+}
+
+.qr-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.qr-wrapper canvas,
+.qr-wrapper img {
+  display: block;
+  border-radius: 4px;
+}
+
+/* ════════════════════════════════════════════
+   MAP CONTAINER
+════════════════════════════════════════════ */
+.map-container {
+  flex: 1;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-deep);
+}
+
+/* Override Leaflet attribution */
+.leaflet-control-attribution {
+  background: rgba(13, 17, 23, 0.75) !important;
+  color: var(--text-muted) !important;
+  backdrop-filter: blur(6px);
+  font-family: var(--font-mono) !important;
+  font-size: 9px !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--accent) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+  font-family: var(--font-mono) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--bg-hover) !important;
+}
+
+/* ── Map Status Pill ── */
+.map-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 500;
+  background: rgba(13, 17, 23, 0.88);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 7px 14px 7px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background var(--transition);
+  flex-shrink: 0;
+}
+
+.status-dot.is-active {
+  background: var(--success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  animation: pulse 2s infinite;
+}
+
+.status-dot.is-error {
+  background: var(--danger);
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25); }
+  50%       { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.08); }
+}
+
+/* ── Map Hint ── */
+.map-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  background: rgba(13, 17, 23, 0.88);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+
+.map-hint.is-hidden {
+  opacity: 0;
+}
+
+/* ════════════════════════════════════════════
+   CUSTOM LEAFLET MARKERS
+════════════════════════════════════════════ */
+
+/* User location marker */
+.user-location-marker {
+  width: 16px;
+  height: 16px;
+  background: #3b82f6;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.35), 0 2px 8px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+/* Reminder pin marker */
+.reminder-pin {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reminder-pin::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: 3px solid #ffffff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.5);
+  position: absolute;
+  top: 0;
+  left: 7px;
+}
+
+/* ════════════════════════════════════════════
+   RESPONSIVE — Mobile (< 768px)
+════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column-reverse;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    height: 40vh;
+    min-height: 40vh;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .map-container {
+    height: 60vh;
+    min-height: 60vh;
+    flex: none;
+    width: 100%;
+  }
+
+  #map {
+    height: 100%;
+  }
+
+  .sidebar__header {
+    padding: 14px 16px 12px;
+  }
+
+  .sidebar__tagline {
+    display: none;
+  }
+
+  .reminder-form {
+    padding: 12px 16px;
+  }
+
+  .reminders-section__header {
+    padding: 10px 16px 8px;
+  }
+
+  .reminders-list {
+    padding: 0 10px 10px;
+  }
+
+  .qr-section {
+    display: none; /* hide QR on mobile to save space */
+  }
+
+  .map-hint {
+    bottom: 10px;
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .map-status {
+    top: 10px;
+    right: 10px;
+    font-size: 10px;
+    padding: 5px 10px 5px 8px;
+  }
+}
+
+/* ════════════════════════════════════════════
+   NOTIFICATION TOAST (JS injected)
+════════════════════════════════════════════ */
+.geo-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  z-index: 9999;
+  background: var(--bg-raised);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.3s ease;
+  white-space: nowrap;
+  max-width: 90vw;
+}
+
+.geo-toast.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.geo-toast__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
